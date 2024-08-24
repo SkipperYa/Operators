@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Operators.Server.Entities.Database;
+using Operators.Server.Entities.Extensions;
 
 namespace Operators.Server
 {
@@ -14,10 +17,11 @@ namespace Operators.Server
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 
-			var app = builder.Build();
+			var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
-			app.UseDefaultFiles();
-			app.UseStaticFiles();
+			builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection), ServiceLifetime.Transient, ServiceLifetime.Transient);
+
+			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
@@ -28,12 +32,11 @@ namespace Operators.Server
 
 			app.UseHttpsRedirection();
 
-			app.UseAuthorization();
-
-
 			app.MapControllers();
 
 			app.MapFallbackToFile("/index.html");
+
+			app.Deploy();
 
 			app.Run();
 		}
