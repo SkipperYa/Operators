@@ -4,8 +4,9 @@ namespace Operators.Server.Entities.Operators
 {
 	public class Operator
 	{
+		public string Name { get; set; }
+
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public long Code { get; set; }
-		public string Name { get; set; }
 	}
 }
