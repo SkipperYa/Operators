@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Operators.Server.Entities.CustomException;
 using Operators.Server.Entities.ViewModels;
 using Operators.Server.Interfaces;
@@ -17,7 +18,7 @@ namespace Operators.Server.Controllers.Operators
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetList(string text, CancellationToken cancellationToken)
+		public async Task<IActionResult> GetList(CancellationToken cancellationToken)
 		{
 			var list = await _operatorsRepositoryService.GetOperators(cancellationToken);
 
@@ -42,9 +43,22 @@ namespace Operators.Server.Controllers.Operators
 		{
 			_operatorsValidatorService.ValidateName(operatorModel.Name);
 
-			var entity = await _operatorsRepositoryService.CreateOperator(operatorModel, cancellationToken);
+			try
+			{
+				var entity = await _operatorsRepositoryService.CreateOperator(operatorModel, cancellationToken);
 
-			return Ok(entity);
+				return Ok(entity);
+			}
+			catch (Exception e)
+			{
+				// Check on duplicate Name
+				if (e.InnerException != null && e.InnerException is SqlException sqle && sqle.Number == 2601)
+				{
+					throw new BusinessLogicException("Operator name is already exist");
+				}
+
+				throw;
+			}
 		}
 
 		[HttpPut]
