@@ -15,7 +15,7 @@ namespace Operators.Server.Services
 
 		public void ValidateName(string name)
 		{
-			if (string.IsNullOrEmpty(name))
+			if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
 			{
 				throw new BusinessLogicException("Invalid Operator Name");
 			}

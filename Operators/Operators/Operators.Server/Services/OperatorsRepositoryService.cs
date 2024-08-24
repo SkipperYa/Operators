@@ -35,7 +35,6 @@ namespace Operators.Server.Services
 		/// <returns>List of Operators</returns>
 		public async Task<List<Operator>> GetOperators(CancellationToken cancellationToken)
 		{
-			// TODO: add pagination
 			var query = _context.Set<Operator>()
 				.AsNoTracking();
 
@@ -89,7 +88,6 @@ namespace Operators.Server.Services
 				return false;
 			}
 
-			// TODO: check when Operator cant be deleted
 			var item = _context.Entry(new Operator() { Code = code });
 
 			item.State = EntityState.Deleted;
