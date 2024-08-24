@@ -2,5 +2,8 @@
 
 REST service for create, update, get and delete operators
 
-##Launch
-``` npm install
+# Dependency
+.Net 8.0, MS SQL Server, node.js 20+ v
+
+# Launch
+``` npm install ```
