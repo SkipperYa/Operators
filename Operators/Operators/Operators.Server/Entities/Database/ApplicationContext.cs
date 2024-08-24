@@ -11,5 +11,15 @@ namespace Operators.Server.Entities.Database
 		{
 			
 		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<Operator>()
+				.HasKey(q => q.Code);
+
+			modelBuilder.Entity<Operator>()
+				.HasIndex(q => q.Name)
+				.IsUnique();
+		}
 	}
 }
